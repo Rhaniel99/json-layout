@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .accordion {
+            position: relative;
+        }
+
+        .accordion-button {
+            background-color: #1c4587;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .accordion-panel {
+            display: none;
+            padding: 10px;
+            background-color: #ffffff;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        .accordion-panel.show {
+            display: block;
+        }
+
+        .highdry {
+            width: 100%;
+            display: none;
+        }
+
+        .accordion-header {
+            position: relative;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            color: #ffffff;
+            text-align: left;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .accordion-header-green {
+            background-color: #008000;
+        }
+
+        .accordion-panel-green {
+            color: #008000;
+        }
+
+        .accordion-panel-blue {
+            color: #2556cc;
+        }
+
+        .accordion-header-blue {
+            background-color: #2556cc;
+            color: #ffffff;
+        }
+
+        .button-blue {
+            background-color: #1c4587;
+        }
+
+        .button-green {
+            background-color: #008000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="conteudo"></div>
+
+    <script>
+        fetch('https://raw.githubusercontent.com/Rhaniel99/teste-json/main/estiagem-ac.json')
+            .then(response => response.json())
+            .then(data => {
+                const accordionDiv = document.getElementById('conteudo');
+                Object.keys(data).forEach((key, index) => {
+                    // Botões Dinamics
+                    const button = document.createElement('button');
+                    button.className = 'accordion-button';
+                    button.textContent = key;
+                    button.style.backgroundColor = index % 2 === 0 ? '#1c4587' : '#008000'; // Alternância entre verde (par) e azul (ímpar)
+
+                    button.onclick = function () {
+                        toggleAccordion(key);
+                    };
+                    accordionDiv.appendChild(button);
+                    const panel = document.createElement('div');
+                    panel.className = 'accordion-panel';
+                    panel.id = key;
+                    // Adiciona links do segundo nível ao painel
+                    const secondLevelData = data[key];
+                    Object.keys(secondLevelData).forEach(subKey => {
+                        const subPanel = document.createElement('div');
+                        subPanel.className = 'sub-panel';
+                        subPanel.innerHTML = `<div class="accordion-header accordion-header-blue">${subKey}</div>`;
+                        const subPanelId = subKey;
+                        const panelId = key;
+                        subPanel.onclick = function () {
+                            togglePanel(panelId, subPanelId)
+                        };
+                        panel.appendChild(subPanel);
+                        // Links
+                        const links = secondLevelData[subKey].links;
+                        const linkList = document.createElement('ul');
+                        // linkList.className = 'highdry';
+                        links.forEach(link => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `<a href="${link.url}" target="_blank">${link.titulo}</a>`;
+                            listItem.className = 'highdry';
+                            listItem.id = `link_${panelId}_${subPanelId}`;
+                            linkList.appendChild(listItem);
+                        });
+                        subPanel.appendChild(linkList);
+                    });
+                    accordionDiv.appendChild(panel);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao obter dados:', error);
+            });
+
+        function toggleAccordion(id) {
+            var panels = document.querySelectorAll('.accordion-panel');
+            panels.forEach(function (panel) {
+                if (panel.id === id) {
+                    panel.classList.toggle('show');
+                } else {
+                    panel.classList.remove('show');
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function togglePanel(perfil, panelNumber) {
+            var conca = `link_${perfil}_${panelNumber}`;
+            var panel = document.getElementById(conca);
+            var allPanels = document.querySelectorAll(".highdry");
+
+            allPanels.forEach(function (lin) {
+                if (lin.id === conca) {
+                    panel = document.getElementById(conca);
+                } else {
+                    lin.classList.remove('show');
+                }
+            });
+
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                for (var i = 0; i < allPanels.length; i++) {
+                    allPanels[i].style.display = "none";
+                }
+                panel.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+</html>
