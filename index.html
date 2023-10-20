@@ -33,7 +33,6 @@
             box-sizing: border-box;
         }
 
-
         .accordion-panel.show {
             display: block;
         }
@@ -41,6 +40,7 @@
         .highdry {
             width: 100%;
             display: none;
+
         }
 
         .accordion-header {
@@ -54,6 +54,7 @@
 
         .accordion-header-green {
             background-color: #008000;
+            margin-bottom: 10px;
         }
 
         .accordion-panel-green {
@@ -67,6 +68,8 @@
         .accordion-header-blue {
             background-color: #2556cc;
             color: #ffffff;
+            margin-bottom: 10px;
+
         }
 
         .button-blue {
@@ -76,12 +79,15 @@
         .button-green {
             background-color: #008000;
         }
+
+        .sub-menus {
+            background-color: #ffffff;
+        }
     </style>
 </head>
 
 <body>
     <div id="conteudo"></div>
-
     <script>
         fetch('https://raw.githubusercontent.com/Rhaniel99/teste-json/main/estiagem-ac.json')
             .then(response => response.json())
@@ -92,7 +98,7 @@
                     const button = document.createElement('button');
                     button.className = 'accordion-button';
                     button.textContent = key;
-                    button.style.backgroundColor = index % 2 === 0 ? '#1c4587' : '#008000'; // Alternância entre verde (par) e azul (ímpar)
+                    button.style.backgroundColor = index % 2 === 0 ? '#1c4587' : '#008000';
 
                     button.onclick = function () {
                         toggleAccordion(key);
@@ -122,7 +128,8 @@
                         panel.appendChild(subPanel);
                         // Links
                         const links = secondLevelData[subKey].links;
-                        const linkList = document.createElement('ul');
+                        const linkList = document.createElement('div');
+                        linkList.className = 'sub-menus'
                         // linkList.className = 'highdry';
                         links.forEach(link => {
                             const listItem = document.createElement('li');
