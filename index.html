@@ -104,9 +104,16 @@
                     // Adiciona links do segundo nível ao painel
                     const secondLevelData = data[key];
                     Object.keys(secondLevelData).forEach(subKey => {
+                        console.log(subKey)
                         const subPanel = document.createElement('div');
                         subPanel.className = 'sub-panel';
-                        subPanel.innerHTML = `<div class="accordion-header accordion-header-blue">${subKey}</div>`;
+                        if (index === 0) {
+                            subPanel.classList.add('accordion-header-blue');
+
+                        } else if (index % 2 === 1) {
+                            subPanel.classList.add('accordion-header-green');
+                        }
+                        subPanel.innerHTML = `<div class="accordion-header">${subKey}</div>`;
                         const subPanelId = subKey;
                         const panelId = key;
                         subPanel.onclick = function () {
