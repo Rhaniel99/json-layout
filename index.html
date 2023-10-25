@@ -37,12 +37,6 @@
             display: block;
         }
 
-        .highdry {
-            width: 100%;
-            display: none;
-
-        }
-
         .accordion-header {
             position: relative;
             padding: 1rem 1.25rem;
@@ -82,6 +76,9 @@
 
         .sub-menus {
             background-color: #ffffff;
+            display: none;
+
+
         }
     </style>
 </head>
@@ -110,7 +107,6 @@
                     // Adiciona links do segundo nível ao painel
                     const secondLevelData = data[key];
                     Object.keys(secondLevelData).forEach(subKey => {
-                        console.log(subKey)
                         const subPanel = document.createElement('div');
                         subPanel.className = 'sub-panel';
                         if (index === 0) {
@@ -130,12 +126,10 @@
                         const links = secondLevelData[subKey].links;
                         const linkList = document.createElement('div');
                         linkList.className = 'sub-menus'
-                        // linkList.className = 'highdry';
+                        linkList.id = `link_${panelId}_${subPanelId}`;
                         links.forEach(link => {
                             const listItem = document.createElement('li');
                             listItem.innerHTML = `<a href="${link.url}" target="_blank">${link.titulo}</a>`;
-                            listItem.className = 'highdry';
-                            listItem.id = `link_${panelId}_${subPanelId}`;
                             linkList.appendChild(listItem);
                         });
                         subPanel.appendChild(linkList);
@@ -163,7 +157,7 @@
         function togglePanel(perfil, panelNumber) {
             var conca = `link_${perfil}_${panelNumber}`;
             var panel = document.getElementById(conca);
-            var allPanels = document.querySelectorAll(".highdry");
+            var allPanels = document.querySelectorAll(".sub-menus");
 
             allPanels.forEach(function (lin) {
                 if (lin.id === conca) {
